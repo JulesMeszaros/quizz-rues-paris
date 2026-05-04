@@ -11,15 +11,23 @@ function App() {
   const [ready, setReady] = useState(false);
   const [success, setSuccess] = useState(null);
   const [lastGuess, setLastGuess] = useState("");
+  const [ruesTrouvees, setRuesTrouvees] = useState([]);
+  const [score, setScore] = useState(0);
 
   const mapRef = useRef(null);
-  function handleStreetFound(feature) {
-    console.log("✅ trouvé :", feature);
-    
+  function handleStreetFound(feature) {    
+    //Ajout de la rue à la carte
     mapRef.current.addStreet(feature);
 
+    //Mise à jour du message de succès
     setLastGuess(feature.properties.l_longmin);
     setSuccess(true);
+
+    //Mise à jour de la liste des rues trouvées
+    setRuesTrouvees((prev) => [...prev, feature.properties.l_longmin]);
+
+    //Mise à jour du score
+    setScore((prev) => prev + 1);
   }
 
   function handleStreetNotFound(name) {
@@ -56,6 +64,7 @@ function App() {
 
         <div id="score-container">
           <h2>Avancement</h2>
+          <h3>{score} / 6594</h3>
         </div>
       </div>
     </>

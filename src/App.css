@@ -26,5 +26,14 @@
 }
 
 #last-guess.failure {
-  color: rgb(204, 13, 13);
+  color: rgb(255, 0, 0);
+}
+
+#score-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  border: solid 1px black;
+  margin: 20px;
 }
