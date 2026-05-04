@@ -1,27 +1,46 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
 import './MapComponent'
 import './App.css'
 import "leaflet/dist/leaflet.css";
 import MapComponent from './MapComponent'
 import StreetInput from './InputComponent'
+import { getStreetIndex } from './logic/getStreetIndex'
+import { useEffect, useState, useRef } from "react";
 
 function App() {
-  const [count, setCount] = useState(0)
+  //Variable qui dit quand le jeu est pret (apres construction de l'index)
+  const [ready, setReady] = useState(false);
 
+  const mapRef = useRef(null);
+  function handleStreetFound(feature) {
+    console.log("✅ trouvé :", feature);
+    
+    mapRef.current.addStreet(feature);
+  }
+
+  useEffect(() => {
+    async function init() {
+      const index = await getStreetIndex(); // 👈 construit UNE FOIS
+      setReady(true);
+      console.log(index)
+    }
+    init();
+  }, []);
+  if (!ready) {
+
+    return <div>Chargement des rues...</div>;
+
+  }else{
   return (
     <>
       <div className="App">
         <h1>Quizz des rues de paris</h1>
-        <StreetInput />
+        <StreetInput onStreetFound={handleStreetFound}/>
         <div id="input-container">
           
         </div>
 
         <div id="map-container">
-          <MapComponent />
+          <MapComponent ref={mapRef}/>
         </div>
 
         <div id="score-container">
@@ -30,6 +49,6 @@ function App() {
       </div>
     </>
   )
-}
+}}
 
 export default App

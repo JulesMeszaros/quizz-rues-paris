@@ -1,17 +1,10 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, forwardRef, useImperativeHandle } from "react";
 import "leaflet/dist/leaflet.css";
 
-export default function MapComponent() {
+const MapComponent = forwardRef(function MapComponent(props, ref) {
     const mapRef = useRef(null);
     const containerRef = useRef(null);
-
-    useEffect(() => {
-        fetch("/voie.geojson")
-            .then((res) => res.json())
-            .then((data) => {
-                L.geoJSON(data).addTo(mapRef.current);
-            });
-    }, []);
+    const layerRef = useRef(null);
 
     useEffect(() => {
         // ⛔ important : import dynamique
@@ -23,13 +16,26 @@ export default function MapComponent() {
                 maxZoom: 16,
             }).setView([48.8566, 2.3522], 12.4);
 
+            const layer = L.geoJSON(null, {
+                style: { color: "red", weight: 4 },
+            }).addTo(map);
+
             L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png", {
                 attribution: "&copy; OpenStreetMap & Carto",
             }).addTo(map);
 
             mapRef.current = map;
+            layerRef.current = layer;
         });
     }, []);
+
+    // 👇 API exposée au parent
+
+    useImperativeHandle(ref, () => ({
+        addStreet(feature) {
+            layerRef.current.addData(feature);
+        },
+    }));
 
     return (
         <div
@@ -37,4 +43,6 @@ export default function MapComponent() {
             style={{ height: "100%", width: "100%" }}
         />
     );
-}
+});
+
+export default MapComponent;
