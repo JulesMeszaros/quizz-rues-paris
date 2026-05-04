@@ -8,7 +8,7 @@ export function normalizeStreetName(str) {
     .replace(/[\u0300-\u036f]/g, ""); // supprime les diacritiques
 }
 
-export default function StreetInput({ onStreetFound }) {
+export default function StreetInput({ onStreetNotFound, onStreetFound }) {
   const [value, setValue] = useState("");
 
   async function handleValidate() {
@@ -25,6 +25,7 @@ export default function StreetInput({ onStreetFound }) {
         onStreetFound(feature);
     } else {
         console.log("❌ pas trouvé");
+        onStreetNotFound(normalizeStreetName(value))
     }
   }
 

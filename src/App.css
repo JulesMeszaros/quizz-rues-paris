@@ -14,3 +14,17 @@
   border: solid 1px black;
   margin: 20px;
 }
+
+#last-guess {
+  font-size: 1.1em;
+  margin-top: 20px;
+  font-weight: bold;
+}
+
+#last-guess.success {
+  color: rgb(27, 173, 27);
+}
+
+#last-guess.failure {
+  color: rgb(204, 13, 13);
+}
