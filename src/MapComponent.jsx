@@ -13,7 +13,7 @@ const MapComponent = forwardRef(function MapComponent(props, ref) {
 
             const map = L.map(containerRef.current, {
                 minZoom: 12,
-                maxZoom: 16,
+                maxZoom: 17,
             }).setView([48.8566, 2.3522], 12.4);
 
             const layer = L.geoJSON(null, {

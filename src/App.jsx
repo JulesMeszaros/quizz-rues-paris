@@ -16,25 +16,34 @@ function App() {
   const [ruesTrouvees, setRuesTrouvees] = useState([]);
   const [score, setScore] = useState(0);
   const [longueurTotale, setLongueurTotale] = useState(0);
+  const [successMessage, setSuccessMessage] = useState("")
 
   const mapRef = useRef(null);
-  function handleStreetFound(feature) {    
-    //Ajout de la rue à la carte
-    mapRef.current.addStreet(feature);
-
-    //Mise à jour du message de succès
+function handleStreetFound(feature) {
+  // Vérifier si la rue a déjà été trouvée
+  if (ruesTrouvees.includes(feature.properties.typo_min)) {
+    // Rue déjà trouvée !
     setLastGuess(feature.properties.typo_min);
-    setSuccess(true);
+    setSuccess(false);  // ← Pas de succès, erreur
+    setSuccessMessage(`Déjà trouvée : ${feature.properties.typo_min}`);
 
-    //Mise à jour de la liste des rues trouvées
-    setRuesTrouvees((prev) => [...prev, feature.properties.typo_min]);
-
-    //Mise à jour du score
-    setScore((prev) => prev + 1);
+    return;  // ← Important : arrêter ici
   }
+
+  // Sinon, continuer normalement
+  mapRef.current.addStreet(feature);
+  setLastGuess(feature.properties.typo_min);
+  setSuccess(true);
+  setSuccessMessage(`Ajouté : ${feature.properties.typo_min}`);
+
+  setRuesTrouvees((prev) => [...prev, feature.properties.typo_min]);
+  setLongueurTotale(longueurTotale + feature.properties.longueur);
+  setScore((prev) => prev + 1);
+}
 
   function handleStreetNotFound(name) {
     setLastGuess(name);
+    setSuccessMessage(`Introuvable : ${name}`);
     setSuccess(false);
   }
 
@@ -58,7 +67,7 @@ function App() {
         <StreetInput onStreetNotFound={handleStreetNotFound} onStreetFound={handleStreetFound}/>
 
         <div id="last-guess" className={success === null ? "" : success ? "success" : "failure"}>
-          {success === null ? "" : success ? `Ajouté : ${lastGuess}` : `Non trouvé : ${lastGuess}`}
+          {successMessage}
         </div>
 
         <div id="map-container">
@@ -67,6 +76,7 @@ function App() {
 
         <div id="score-container">
           <h2>Avancement</h2>
+          <h3>Longueur totale trouvée : {longueurTotale}m</h3>
           <h3>{score} / 6594</h3>
         </div>
       </div>
