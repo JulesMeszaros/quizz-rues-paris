@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 
 import './MapComponent'
@@ -8,6 +9,7 @@ import StreetInput from './InputComponent'
 import { getStreetIndex } from './utils/getStreetIndex'
 import { useEffect, useState, useRef } from "react";
 import normalizeStreet from './utils/normalizeStreetName';
+import { saveGame, loadGame, deleteGame } from './utils/saveManager';
 
 function App() {
   //Variable qui dit quand le jeu est pret (apres construction de l'index)
@@ -17,30 +19,40 @@ function App() {
   const [ruesTrouvees, setRuesTrouvees] = useState([]);
   const [score, setScore] = useState(0);
   const [longueurTotale, setLongueurTotale] = useState(0);
-  const [successMessage, setSuccessMessage] = useState("")
+  const [successMessage, setSuccessMessage] = useState("");
 
+  //Etat pour le chargement de la save
+  const [saveLoaded, setSaveLoaded] = useState(false)
+  const [mapReady, setMapReady] = useState(false)
+
+  //Refs pour la carte
   const mapRef = useRef(null);
-function handleStreetFound(feature) {
-  // Vérifier si la rue a déjà été trouvée
-  if (ruesTrouvees.includes(feature.properties.typo_min)) {
-    // Rue déjà trouvée !
+  const layerRef = useRef(null);
+
+
+  //Fonction déclenchée lorsqu'une rue est trouvée ou retrouvée
+  function handleStreetFound(feature) {
+    // Vérifier si la rue a déjà été trouvée
+    if (ruesTrouvees.some(rue => rue.properties.typo_min === feature.properties.typo_min)) {
+      // Rue déjà trouvée
+      setLastGuess(feature.properties.typo_min);
+      setSuccess(false);
+      setSuccessMessage(`Déjà trouvée : ${feature.properties.typo_min}`);
+      return;
+    }
+
+    // Sinon, continuer normalement
+    mapRef.current.addStreet(feature);
     setLastGuess(feature.properties.typo_min);
-    setSuccess(false);  // ← Pas de succès, erreur
-    setSuccessMessage(`Déjà trouvée : ${feature.properties.typo_min}`);
+    setSuccess(true);
+    setSuccessMessage(`Ajouté : ${feature.properties.typo_min}`);
 
-    return;  // ← Important : arrêter ici
+    console.log(ruesTrouvees)
+
+    setRuesTrouvees((prev) => [...prev, feature]);
+    setLongueurTotale(longueurTotale + feature.properties.longueur);
+    setScore((prev) => prev + 1);
   }
-
-  // Sinon, continuer normalement
-  mapRef.current.addStreet(feature);
-  setLastGuess(feature.properties.typo_min);
-  setSuccess(true);
-  setSuccessMessage(`Ajouté : ${feature.properties.typo_min}`);
-
-  setRuesTrouvees((prev) => [...prev, feature.properties.typo_min]);
-  setLongueurTotale(longueurTotale + feature.properties.longueur);
-  setScore((prev) => prev + 1);
-}
 
   function handleStreetNotFound(name) {
     setLastGuess(name);
@@ -48,41 +60,92 @@ function handleStreetFound(feature) {
     setSuccess(false);
   }
 
+  //Au lancement de la partie
   useEffect(() => {
     async function init() {
+      //Creation de l'index des rues
       const index = await getStreetIndex(); // 👈 construit UNE FOIS
+
+      //Récup la save locale
+      const gameSave = loadGame()
+
+      //On remet les variables d'état avec les valeurs de la save
+      if (gameSave) {
+        setLongueurTotale(gameSave.longueurTotale)
+        setScore(gameSave.score)
+        setRuesTrouvees(gameSave.ruesTrouvees)
+        setSaveLoaded(true)
+      }
+
+
       setReady(true);
-      console.log(index)
     }
     init();
   }, []);
+
+  //Fonction qui se déclenche quand la carte est chargée et que la save est chargée
+  useEffect(() => {
+
+    if (!saveLoaded || !mapReady) return; // Attendre les 2
+
+    ruesTrouvees.forEach(feature => {
+      mapRef.current.addStreet(feature);
+    });
+
+  }, [saveLoaded, mapReady])
+
+  const handleMapReady = (layerReady) => {
+    setMapReady(layerReady); // Passer layerReady depuis MapComponent
+  };
+
+  //Fonction qui enregistre la partie dans la session quand une nouvelle rue est trouvée
+  useEffect(() => {
+    if (ready == true) {
+      console.log("saving game")
+      saveGame(ruesTrouvees, score, longueurTotale)
+    }
+  }, [ruesTrouvees, score, longueurTotale, ready]);
+
+  //Fonction pour reset la partie
+  const resetGame = () => {
+    setLongueurTotale(0)
+    setLastGuess("")
+    setRuesTrouvees([])
+    setScore(0)
+    setSuccess(false)
+    setSuccessMessage("")
+  }
+
   if (!ready) {
 
     return <div>Chargement des rues...</div>;
 
-  }else{
-  return (
-    <>
-      <div className="App">
-        <h1>Quizz des rues de paris</h1>
-        <StreetInput onStreetNotFound={handleStreetNotFound} onStreetFound={handleStreetFound}/>
+  } else {
+    return (
+      <>
+        <div className="App">
+          <h1>Paris</h1>
+          <StreetInput onStreetNotFound={handleStreetNotFound} onStreetFound={handleStreetFound} />
 
-        <div id="last-guess" className={success === null ? "" : success ? "success" : "failure"}>
-          {successMessage}
-        </div>
+          <div id="last-guess" className={success === null ? "" : success ? "success" : "failure"}>
+            {successMessage}
+          </div>
 
-        <div id="map-container">
-          <MapComponent ref={mapRef}/>
-        </div>
+          <div id="map-container">
+            <MapComponent ref={mapRef} onMapReady={handleMapReady} />
+          </div>
 
-        <div id="score-container">
-          <h2>Avancement</h2>
-          <h3>Longueur totale trouvée : {longueurTotale}m</h3>
-          <h3>{score} / 6594</h3>
+          <div id="score-container">
+            <h2>Avancement</h2>
+            <h3>Longueur totale trouvée : {longueurTotale}m</h3>
+            <h3>{score} / 6594</h3>
+          </div>
+
+          <button onClick={resetGame}>Supprimer l'avancement</button>
         </div>
-      </div>
-    </>
-  )
-}}
+      </>
+    )
+  }
+}
 
 export default App

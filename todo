@@ -1,7 +1,4 @@
 - Ajouter une liste des voies devinées
-- Modifier la reconnaissance de texte : 
-    - Permettre l'utilisation de "blvd", "blv", "bvd"
-    - retirer les tirets, les appostrophes, les virgules (au cas ou)
 - Ajouter un peu de style
 - Sauvegarder l'avancement dans la session? (cookies)
 - Permettre de changer le layout de la carte

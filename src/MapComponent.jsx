@@ -1,10 +1,12 @@
-import { useEffect, useRef, forwardRef, useImperativeHandle } from "react";
+import { useEffect, useRef, useState, forwardRef, useImperativeHandle } from "react";
 import "leaflet/dist/leaflet.css";
 
-const MapComponent = forwardRef(function MapComponent(props, ref) {
+const MapComponent = forwardRef(function MapComponent({onMapReady}, ref) {
     const mapRef = useRef(null);
     const containerRef = useRef(null);
     const layerRef = useRef(null);
+
+    const [layerReady, setLayerReady] = useState(false);
 
     useEffect(() => {
         // ⛔ important : import dynamique
@@ -26,8 +28,17 @@ const MapComponent = forwardRef(function MapComponent(props, ref) {
 
             mapRef.current = map;
             layerRef.current = layer;
+
+            setLayerReady(true); // ✅ Couche prête
         });
     }, []);
+
+    //Permet de notifier le parent que la carte est prête
+    useEffect(()=>{
+        if(onMapReady){
+            onMapReady(layerReady);
+        }
+    },[onMapReady])
 
     // 👇 API exposée au parent
 
