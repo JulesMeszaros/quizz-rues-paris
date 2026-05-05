@@ -1,11 +1,7 @@
+import normalizeStreet from "./normalizeStreetName";
+
 let streetIndex = null;
 
-function normalizeStreet(str) {
-  return str
-    .toLowerCase()
-    .normalize("NFD") // décompose les accents
-    .replace(/[\u0300-\u036f]/g, ""); // supprime les diacritiques
-}
 
 export async function getStreetIndex() {
   if (streetIndex) return streetIndex;

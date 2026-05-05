@@ -1,23 +1,18 @@
 import { useState } from "react";
-import { getStreetIndex } from "./logic/getStreetIndex";
+import { getStreetIndex } from "./utils/getStreetIndex";
+import normalizeStreet from "./utils/normalizeStreetName";
 
-function normalizeStreetName(str) {
-  return str
-    .toLowerCase()
-    .normalize("NFD") // décompose les accents
-    .replace(/[\u0300-\u036f]/g, ""); // supprime les diacritiques
-}
 
 export default function StreetInput({ onStreetNotFound, onStreetFound }) {
   const [value, setValue] = useState("");
 
   async function handleValidate() {
-    console.log("Rue entrée :", normalizeStreetName(value));
+    console.log("Rue entrée :", normalizeStreet(value));
     setValue(""); // optionnel : reset après validation
 
     const index = await getStreetIndex(); // 👈 récupère l'index (construit une fois)
 
-    const key = normalizeStreetName(value);
+    const key = normalizeStreet(value);
     const feature = index.get(key);
 
     if (feature) {
@@ -25,7 +20,7 @@ export default function StreetInput({ onStreetNotFound, onStreetFound }) {
         onStreetFound(feature);
     } else {
         console.log("❌ pas trouvé");
-        onStreetNotFound(normalizeStreetName(value))
+        onStreetNotFound(value)
     }
   }
 

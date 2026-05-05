@@ -5,8 +5,9 @@ import './App.css'
 import "leaflet/dist/leaflet.css";
 import MapComponent from './MapComponent'
 import StreetInput from './InputComponent'
-import { getStreetIndex } from './logic/getStreetIndex'
+import { getStreetIndex } from './utils/getStreetIndex'
 import { useEffect, useState, useRef } from "react";
+import normalizeStreet from './utils/normalizeStreetName';
 
 function App() {
   //Variable qui dit quand le jeu est pret (apres construction de l'index)
