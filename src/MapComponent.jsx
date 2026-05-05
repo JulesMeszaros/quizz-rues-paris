@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+
 import { useEffect, useRef, useState, forwardRef, useImperativeHandle } from "react";
 import "leaflet/dist/leaflet.css";
 
