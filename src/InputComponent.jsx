@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { getStreetIndex } from "./logic/getStreetIndex";
 
-export function normalizeStreetName(str) {
+function normalizeStreetName(str) {
   return str
     .toLowerCase()
     .normalize("NFD") // décompose les accents

@@ -1,0 +1,13 @@
+- Ajouter une liste des voies devinées
+- Modifier la reconnaissance de texte : 
+    - Permettre l'utilisation de "blvd", "blv", "bvd"
+    - retirer les tirets, les appostrophes, les virgules (au cas ou)
+- Ajouter un peu de style
+- Sauvegarder l'avancement dans la session? (cookies)
+- Permettre de changer le layout de la carte
+- Afficher les longueurs des rues trouvées, faire un cumulé, un pourcentage du total?
+- Ajouter un cas lorsque la rue a déjà été trouvée
+- Ajouter des petites stats rigolottes? Nombre d'avenues, nombre de quais, nombre de voies etc?
+- Ajouter des stats par arrondissement?
+
+

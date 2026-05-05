@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+
 import './MapComponent'
 import './App.css'
 import "leaflet/dist/leaflet.css";
@@ -13,6 +15,7 @@ function App() {
   const [lastGuess, setLastGuess] = useState("");
   const [ruesTrouvees, setRuesTrouvees] = useState([]);
   const [score, setScore] = useState(0);
+  const [longueurTotale, setLongueurTotale] = useState(0);
 
   const mapRef = useRef(null);
   function handleStreetFound(feature) {    
@@ -20,11 +23,11 @@ function App() {
     mapRef.current.addStreet(feature);
 
     //Mise à jour du message de succès
-    setLastGuess(feature.properties.l_longmin);
+    setLastGuess(feature.properties.typo_min);
     setSuccess(true);
 
     //Mise à jour de la liste des rues trouvées
-    setRuesTrouvees((prev) => [...prev, feature.properties.l_longmin]);
+    setRuesTrouvees((prev) => [...prev, feature.properties.typo_min]);
 
     //Mise à jour du score
     setScore((prev) => prev + 1);

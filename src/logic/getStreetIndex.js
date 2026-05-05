@@ -10,13 +10,13 @@ function normalizeStreet(str) {
 export async function getStreetIndex() {
   if (streetIndex) return streetIndex;
 
-  const res = await fetch("/voie.geojson");
+  const res = await fetch("/denominations-emprises-voies-actuelles.geojson");
   const geoData = await res.json();
 
   streetIndex = new Map();
 
   geoData.features.forEach((feature) => {
-    const name = feature.properties.l_longmin;
+    const name = feature.properties.typo_min;
     if (!name) return;
 
     streetIndex.set(normalizeStreet(name), feature);
