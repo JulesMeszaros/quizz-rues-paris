@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, forwardRef, useImperativeHandle } from "react";
 import "leaflet/dist/leaflet.css";
 
-const MapComponent = forwardRef(function MapComponent({onMapReady}, ref) {
+const MapComponent = forwardRef(function MapComponent({ onMapReady }, ref) {
     const mapRef = useRef(null);
     const containerRef = useRef(null);
     const layerRef = useRef(null);
@@ -22,6 +22,10 @@ const MapComponent = forwardRef(function MapComponent({onMapReady}, ref) {
 
             const layer = L.geoJSON(null, {
                 style: { color: "red", weight: 4 },
+                onEachFeature: (feature, layer) => {
+                    // Ajouter un popup au clic
+                    layer.bindPopup(`<strong>${feature.properties.typo}</strong> <br> ${feature.properties.longueur}m`);
+                }
             }).addTo(map);
 
             L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png", {
@@ -36,11 +40,11 @@ const MapComponent = forwardRef(function MapComponent({onMapReady}, ref) {
     }, []);
 
     //Permet de notifier le parent que la carte est prête
-    useEffect(()=>{
-        if(onMapReady){
+    useEffect(() => {
+        if (onMapReady) {
             onMapReady(layerReady);
         }
-    },[onMapReady])
+    }, [onMapReady])
 
     // 👇 API exposée au parent
     useImperativeHandle(ref, () => ({
