@@ -43,11 +43,15 @@ const MapComponent = forwardRef(function MapComponent({onMapReady}, ref) {
     },[onMapReady])
 
     // 👇 API exposée au parent
-
     useImperativeHandle(ref, () => ({
         addStreet(feature) {
             layerRef.current.addData(feature);
         },
+
+        resetMap() {
+            console.log("reset")
+            layerRef.current.clearLayers();
+        }
     }));
 
     return (

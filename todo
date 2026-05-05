@@ -1,8 +1,12 @@
 - Ajouter une liste des voies devinées
 - Ajouter un peu de style
-- Sauvegarder l'avancement dans la session? (cookies)
 - Permettre de changer le layout de la carte
 - Ajouter des petites stats rigolottes? Nombre d'avenues, nombre de quais, nombre de voies etc?
 - Ajouter des stats par arrondissement?
+- Choisir des couleurs selon le type de voie? Rues, Avenues, Ponts, etc...
+- Terminer le bouton reset de partie 
+    - Doit reset la save locale
+    - Remettre à 0 le score, longueur totale, rues trouvées
+    - Doit remettre à 0 la carte
 
 

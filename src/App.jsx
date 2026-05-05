@@ -114,6 +114,7 @@ function App() {
     setScore(0)
     setSuccess(false)
     setSuccessMessage("")
+    mapRef.current.resetMap()
   }
 
   if (!ready) {
