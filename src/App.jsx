@@ -45,7 +45,7 @@ function App() {
     mapRef.current.addStreet(feature);
     setLastGuess(feature.properties.typo_min);
     setSuccess(true);
-    setSuccessMessage(`Ajouté : ${feature.properties.typo_min}`);
+    setSuccessMessage(`Ajouté : ${feature.properties.typo_min}, ${feature.properties.longueur}m (${feature.properties.arrdt} arrondissement(s))`);
 
     console.log(ruesTrouvees)
 

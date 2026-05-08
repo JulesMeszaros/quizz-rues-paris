@@ -24,7 +24,19 @@ const MapComponent = forwardRef(function MapComponent({ onMapReady }, ref) {
                 style: { color: "red", weight: 4 },
                 onEachFeature: (feature, layer) => {
                     // Ajouter un popup au clic
-                    layer.bindPopup(`<strong>${feature.properties.typo}</strong> <br> ${feature.properties.longueur}m`);
+                    layer.bindPopup(`<a target=blank href="https://maps.google.com/maps?q=&layer=c&cbll=${feature.properties.geo_point_2d.lat},${feature.properties.geo_point_2d.lon}&cbp="><strong>${feature.properties.typo}</strong></a> <br> ${feature.properties.longueur}m`);
+
+                    layer.on('mouseover', function () {
+                        this.setStyle({
+                            'color': '#0000ff'
+                        });
+                    });
+
+                    layer.on('mouseout', function () {
+                        this.setStyle({
+                            'color': 'red'
+                        });
+                    });
                 }
             }).addTo(map);
 

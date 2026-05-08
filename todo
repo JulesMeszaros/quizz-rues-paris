@@ -1,12 +1,14 @@
 - Ajouter une liste des voies devinées
+    (peut etre un peu trop long)
 - Ajouter un peu de style
 - Permettre de changer le layout de la carte
 - Ajouter des petites stats rigolottes? Nombre d'avenues, nombre de quais, nombre de voies etc?
 - Ajouter des stats par arrondissement?
-- Choisir des couleurs selon le type de voie? Rues, Avenues, Ponts, etc...
 - Terminer le bouton reset de partie 
     - Doit reset la save locale
     - Remettre à 0 le score, longueur totale, rues trouvées
     - Doit remettre à 0 la carte
-
-
+- Mettre en vert la dernière rue trouvée
+- Mettre un moyen de centrer la caméra sur la dernière rue trouvée
+- Préciser l'arrondissement et la longueur de la dernière rue trouvée
+- Mettre un lien dans les infobulles qui mènent vers le street view de la ville
