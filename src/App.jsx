@@ -125,7 +125,7 @@ function App() {
     return (
       <>
         <div className="App">
-          <h1>Paris</h1>
+          <h1>Les rues de Paris</h1>
           <StreetInput onStreetNotFound={handleStreetNotFound} onStreetFound={handleStreetFound} />
 
           <div id="last-guess" className={success === null ? "" : success ? "success" : "failure"}>
@@ -145,7 +145,7 @@ function App() {
           <button onClick={resetGame}>Supprimer l'avancement</button>
 
           <hr />
-          <i>un quizz de <a href="https://www.x.com/n8sc4p3">@n8scape</a> - testez mon nouveau jeu gratuitement, <a href="https://n8scape.itch.io/Dice-Deluxe">Dice Deluxe!!</a></i>
+          <i>v0.1 -- Un quizz de <a href="https://www.x.com/n8sc4p3">@n8scape</a> - testez mon nouveau jeu gratuitement, <a href="https://n8scape.itch.io/Dice-Deluxe">Dice Deluxe!!</a></i>
         </div>
       </>
     )
