@@ -145,7 +145,7 @@ function App() {
           <button onClick={resetGame}>Supprimer l'avancement</button>
 
           <hr />
-          <i>un quizz de <a href="https://www.x.com/user/n8sc4p3">@n8scape</a> - testez mon nouveau jeu gratuitement, <a href="https://n8scape.itch.io/Dice-Deluxe">Dice Deluxe!!</a></i>
+          <i>un quizz de <a href="https://www.x.com/n8sc4p3">@n8scape</a> - testez mon nouveau jeu gratuitement, <a href="https://n8scape.itch.io/Dice-Deluxe">Dice Deluxe!!</a></i>
         </div>
       </>
     )
