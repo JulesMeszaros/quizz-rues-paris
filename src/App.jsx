@@ -119,7 +119,7 @@ function App() {
 
   if (!ready) {
 
-    return <div>Chargement des rues...</div>;
+    return <div id="chargement-message"><p>Chargement des rues... <br/>ça peut prendre du temps désolé</p></div>;
 
   } else {
     return (
@@ -143,6 +143,9 @@ function App() {
           </div>
 
           <button onClick={resetGame}>Supprimer l'avancement</button>
+
+          <hr />
+          <i>un quizz de <a href="https://www.x.com/user/n8sc4p3">@n8scape</a> - testez mon nouveau jeu gratuitement, <a href="https://n8scape.itch.io/Dice-Deluxe">Dice Deluxe!!</a></i>
         </div>
       </>
     )
